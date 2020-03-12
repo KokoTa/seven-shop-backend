@@ -1,4 +1,4 @@
-package com.example.shop.other;
+package com.example.shop.other.testClass;
 
 public class B {
     public void say() {

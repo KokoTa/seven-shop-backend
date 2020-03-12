@@ -19,7 +19,6 @@ public class AutoPrefixUrlMapping extends RequestMappingHandlerMapping {
         RequestMappingInfo mappingInfo = super.getMappingForMethod(method, handlerType);
         if (mappingInfo != null) {
             String prefix = this.getPrefix(handlerType);
-            System.out.println(prefix);
             if (prefix != null) {
                 // path 前缀，build 构建一个新 info，combine 合并另一个 info
                 RequestMappingInfo newRequestMappingInfo = RequestMappingInfo.paths(prefix).build().combine(mappingInfo);
@@ -33,9 +32,17 @@ public class AutoPrefixUrlMapping extends RequestMappingHandlerMapping {
     public String getPrefix(Class<?> handlerType) {
         String packageName = handlerType.getPackage().getName();
         String pattern = this.autoPrefixApiPackage + ".*";
+
+        System.out.println(packageName);
+
         // packageName 可能返回其他的包路径，要确保这个路径和 api 基础路径是匹配的
         if (Pattern.matches(pattern, packageName)) {
-            return packageName.replace(autoPrefixApiPackage + ".", "/");
+            String basePath = packageName.replace(autoPrefixApiPackage + ".", "/");
+            String urlPath = basePath.replace("\\.", "/");
+
+            System.out.println(urlPath);
+
+            return urlPath;
         }
         return null;
     }

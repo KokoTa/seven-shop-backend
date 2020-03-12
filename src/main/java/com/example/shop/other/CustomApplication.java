@@ -1,16 +1,12 @@
-package com.example.shop;
+package com.example.shop.other;
 
-import com.example.shop.other.A;
-import com.example.shop.other.BeanConfig;
-import com.example.shop.other.BeanSelector;
-import com.example.shop.other.EnableCustomConfiguration;
+import com.example.shop.other.testClass.A;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Import;
 
-//@ComponentScan
+// 手动实现一个启动类
+// @ComponentScan
 @EnableCustomConfiguration
 public class CustomApplication {
     public static void main(String[] args) throws IllegalAccessException, InstantiationException, ClassNotFoundException {
