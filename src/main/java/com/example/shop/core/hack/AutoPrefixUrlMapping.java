@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 public class AutoPrefixUrlMapping extends RequestMappingHandlerMapping {
 
-    @Value("${auto-prefix-api-package}")
+    @Value("${condition.auto-prefix-api-package}")
     private String autoPrefixApiPackage;
 
     @Override

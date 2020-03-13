@@ -1,0 +1,12 @@
+
+# 自定义的配置
+condition:
+  name: A
+  auto-prefix-api-package: com.example.shop.api
+# 根据环境引入配置
+spring:
+  profiles:
+    active: dev
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
