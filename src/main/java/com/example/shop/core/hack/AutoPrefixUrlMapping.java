@@ -33,14 +33,10 @@ public class AutoPrefixUrlMapping extends RequestMappingHandlerMapping {
         String packageName = handlerType.getPackage().getName();
         String pattern = this.autoPrefixApiPackage + ".*";
 
-        System.out.println(packageName);
-
         // packageName 可能返回其他的包路径，要确保这个路径和 api 基础路径是匹配的
         if (Pattern.matches(pattern, packageName)) {
             String basePath = packageName.replace(autoPrefixApiPackage + ".", "/");
             String urlPath = basePath.replace("\\.", "/");
-
-            System.out.println(urlPath);
 
             return urlPath;
         }
