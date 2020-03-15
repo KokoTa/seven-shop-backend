@@ -1,19 +1,19 @@
 package com.example.shop.model;
 
-import javax.persistence.
-        *;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 
 @Entity
-public class BannerItem {
+@Getter
+@Setter
+public class BannerItem extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String img;
     private String keyword;
-    private Short type;
-    private String name;
+    private short type;
     private Long bannerId;
-    @ManyToOne
-    @JoinColumn(name = "bannerId", updatable = false, insertable = false, foreignKey = @ForeignKey( name = "none", value = ConstraintMode.NO_CONSTRAINT))
-    private Banner banner;
+    private String name;
 }

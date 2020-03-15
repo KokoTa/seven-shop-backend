@@ -1,5 +1,6 @@
 package com.example.shop.api.v1;
 
+import com.example.shop.exception.http.NotFoundException;
 import com.example.shop.model.Banner;
 import com.example.shop.service.BannerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ public class BannerController {
     @GetMapping("/name/{name}")
     public Banner getByName(@PathVariable String name) {
         Banner banner = bannerService.getByName(name);
+        if (banner == null) throw new NotFoundException(30005);
         return banner;
     }
 
