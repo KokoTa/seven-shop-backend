@@ -34,7 +34,7 @@ public class GlobalExceptionHandle {
         String method = req.getMethod();
         String url = req.getRequestURI();
         String errStr = e.getMessage();
-        return new ExceptionResponse(10000, errStr, method + " " + url);
+        return new ExceptionResponse(99999, errStr, method + " " + url);
     }
 
     // 自定义的 Http 异常

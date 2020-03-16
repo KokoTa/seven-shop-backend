@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class BannerServiceImpl implements IBannerService {
+public class BannerService {
     @Autowired
     BannerRepository bannerRepository;
 

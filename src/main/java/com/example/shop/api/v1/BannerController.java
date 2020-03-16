@@ -2,7 +2,7 @@ package com.example.shop.api.v1;
 
 import com.example.shop.exception.http.NotFoundException;
 import com.example.shop.model.Banner;
-import com.example.shop.service.BannerServiceImpl;
+import com.example.shop.service.BannerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 public class BannerController {
 
     @Autowired
-    private BannerServiceImpl bannerService;
+    private BannerService bannerService;
 
     @GetMapping("/name/{name}")
     public Banner getByName(@PathVariable String name) {
