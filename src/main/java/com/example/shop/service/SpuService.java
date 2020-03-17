@@ -3,6 +3,10 @@ package com.example.shop.service;
 import com.example.shop.model.Spu;
 import com.example.shop.repository.SpuRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +21,8 @@ public class SpuService {
         return spuRepository.findOneById(id);
     }
 
-    public List<Spu> getLatestSpuListByPage() {
-        return spuRepository.findAll();
+    public Page<Spu> getLatestSpuListByPage(Integer pageNo, Integer pageSize) {
+        Pageable page = PageRequest.of(pageNo, pageSize, Sort.by("createTime").descending());
+        return spuRepository.findAll(page);
     }
 }
