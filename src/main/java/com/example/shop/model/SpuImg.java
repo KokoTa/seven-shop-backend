@@ -14,5 +14,5 @@ public class SpuImg extends BaseEntity {
     @Id
     private Long id;
     private String img;
-    private Integer spuId;
+    private Long spuId;
 }
