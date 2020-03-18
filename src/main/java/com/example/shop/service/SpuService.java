@@ -25,4 +25,17 @@ public class SpuService {
         Pageable page = PageRequest.of(pageNo, pageSize, Sort.by("createTime").descending());
         return spuRepository.findAll(page);
     }
+
+    public Page<Spu> getSpuListByCategoryId(Long id, Boolean isRoot, Integer pageNo, Integer pageSize) {
+        Pageable page = PageRequest.of(pageNo, pageSize);
+        Page<Spu> spuPage = null;
+
+        if (isRoot) {
+            spuPage = spuRepository.findAllByRootCategoryIdOrderByCreateTime(id, page);
+        } else {
+            spuPage = spuRepository.findAllByCategoryIdOrderByCreateTime(id, page);
+        }
+
+        return spuPage;
+    }
 }
