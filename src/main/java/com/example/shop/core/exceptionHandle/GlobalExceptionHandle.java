@@ -1,4 +1,4 @@
-package com.example.shop.core;
+package com.example.shop.core.exceptionHandle;
 
 import com.example.shop.core.configuration.ExceptionCodeConfiguration;
 import com.example.shop.exception.http.HttpException;
@@ -15,10 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.List;
-import java.util.Set;
 
 @ControllerAdvice
 public class GlobalExceptionHandle {

@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
 
 /**
  * 传参测试、错误捕获测试
@@ -29,7 +30,7 @@ public class TestController {
     }
 
     @GetMapping("/testParams/{userId}")
-    Integer testParamByPath(@PathVariable(name = "userId") @Min(10) Integer id) {
+    Integer testParamByPath(@PathVariable(name = "userId") @Positive(message = "{id.positive}") Integer id) {
         return id;
     }
 
