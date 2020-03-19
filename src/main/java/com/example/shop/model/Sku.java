@@ -1,6 +1,7 @@
 package com.example.shop.model;
 
 import com.example.shop.util.GenericJsonConverter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.Getter;
 import lombok.Setter;
