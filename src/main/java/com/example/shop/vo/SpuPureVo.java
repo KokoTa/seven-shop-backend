@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SpuSimpleVo {
+public class SpuPureVo {
     private Long id;
     private String title;
     private String subtitle;
