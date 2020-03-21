@@ -6,7 +6,7 @@ import com.example.shop.model.Spu;
 import com.example.shop.service.SpuService;
 import com.example.shop.util.CommonUtil;
 import com.example.shop.vo.PagingDozer;
-import com.example.shop.vo.SpuPureVo;
+import com.example.shop.vo.SpuPureVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,27 +33,27 @@ public class SpuController {
     }
 
     @GetMapping("/simple/{id}")
-    public SpuPureVo getSimpleSpu(@PathVariable @Positive Long id) {
+    public SpuPureVO getSimpleSpu(@PathVariable @Positive Long id) {
         Spu spu = spuService.getSpuById(id);
-        SpuPureVo vo = new SpuPureVo();
+        SpuPureVO vo = new SpuPureVO();
         BeanUtils.copyProperties(spu, vo); // 只能浅拷贝
         return vo;
     }
 
     @GetMapping("/latest")
-    public PagingDozer<Spu, SpuPureVo> getLatestSpuList(
+    public PagingDozer<Spu, SpuPureVO> getLatestSpuList(
             @RequestParam(name = "start", defaultValue = "0") Integer start,
             @RequestParam(name = "count", defaultValue = "10") Integer count
     ) {
         PageCounter pageCounter = CommonUtil.convertToPageParameter(start, count);
         Page<Spu> page = spuService.getLatestSpuListByPage(pageCounter.getPageNo(), pageCounter.getPageSize());
-        PagingDozer<Spu, SpuPureVo> pagingDozer = new PagingDozer<>(page, SpuPureVo.class);
+        PagingDozer<Spu, SpuPureVO> pagingDozer = new PagingDozer<>(page, SpuPureVO.class);
 
         return pagingDozer;
     }
 
     @GetMapping("/category/{id}")
-    public PagingDozer<Spu, SpuPureVo> getSpuListByCategoryId(
+    public PagingDozer<Spu, SpuPureVO> getSpuListByCategoryId(
             @PathVariable(name = "id") @Positive Long id,
             @RequestParam(name = "isRoot") Boolean isRoot,
             @RequestParam(name = "start", defaultValue = "0") Integer start,
@@ -61,7 +61,7 @@ public class SpuController {
     ) {
         PageCounter pageCounter = CommonUtil.convertToPageParameter(start, count);
         Page<Spu> page = spuService.getSpuListByCategoryId(id, isRoot, pageCounter.getPageNo(), pageCounter.getPageSize());
-        PagingDozer<Spu, SpuPureVo> pagingDozer = new PagingDozer<>(page, SpuPureVo.class);
+        PagingDozer<Spu, SpuPureVO> pagingDozer = new PagingDozer<>(page, SpuPureVO.class);
 
         return pagingDozer;
     }

@@ -7,7 +7,7 @@ import org.springframework.beans.BeanUtils;
 
 @Getter
 @Setter
-public class CategoryPureVo {
+public class CategoryPureVO {
     private Long id;
     private String name;
     private String description;
@@ -18,7 +18,7 @@ public class CategoryPureVo {
     private Long online;
     private Long level;
 
-    public CategoryPureVo(Category category) {
+    public CategoryPureVO(Category category) {
         BeanUtils.copyProperties(category, this);
     }
 }

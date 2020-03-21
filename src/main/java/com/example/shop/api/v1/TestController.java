@@ -1,6 +1,6 @@
 package com.example.shop.api.v1;
 
-import com.example.shop.dto.User;
+import com.example.shop.dto.UserDTO;
 import com.example.shop.exception.http.ForbiddenException;
 import com.example.shop.other.testClass.A;
 import com.example.shop.other.testClass.B;
@@ -43,5 +43,5 @@ public class TestController {
     }
 
     @PostMapping("/testParams")
-    User testParamByBody(@RequestBody @Validated User user) { return user; }
+    UserDTO testParamByBody(@RequestBody @Validated UserDTO user) { return user; }
 }

@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.Range;
 @Getter
 @Setter
 @PasswordEqual
-public class User {
+public class UserDTO {
     private String name;
 
     @Range(min = 10, max = 100)

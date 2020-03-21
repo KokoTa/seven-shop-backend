@@ -3,7 +3,7 @@ package com.example.shop.api.v1;
 import com.example.shop.model.GridCategory;
 import com.example.shop.service.CategoryService;
 import com.example.shop.service.GridCategoryService;
-import com.example.shop.vo.CategoryAllVo;
+import com.example.shop.vo.CategoryAllVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,8 +25,8 @@ public class CategoryController {
     GridCategoryService gridCategoryService;
 
     @GetMapping("/all")
-    public CategoryAllVo getAllCategory() {
-        return new CategoryAllVo(categoryService.getAllCategory());
+    public CategoryAllVO getAllCategory() {
+        return new CategoryAllVO(categoryService.getAllCategory());
     }
 
     @GetMapping("/grid/all")

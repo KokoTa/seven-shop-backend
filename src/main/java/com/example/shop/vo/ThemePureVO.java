@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ThemePureVo {
+public class ThemePureVO {
     private Long id;
     private String title;
     private String description;
