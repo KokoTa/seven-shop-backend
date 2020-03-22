@@ -17,7 +17,6 @@ public class ListJsonConverter implements AttributeConverter<List<Object>, Strin
     @Override
     public String convertToDatabaseColumn(List<Object> objects) {
         try {
-            if (objects == null) return "";
             return objectMapper.writeValueAsString(objects);
         } catch (JsonProcessingException e) {
             e.printStackTrace();

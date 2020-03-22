@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RequestMapping("/token")
 @RestController
 public class TokenController {
@@ -19,14 +22,14 @@ public class TokenController {
     private AuthenticationService authenticationService;
 
     @PostMapping("")
-    public TokenDTO getToken(
-            @RequestBody @Validated TokenDTO tokenDTO
-    ) {
-
+    public Map<String, Object> getToken(@RequestBody @Validated TokenDTO tokenDTO) {
         LoginType loginType = tokenDTO.getType();
+        String token = null;
+        Map<String, Object> map = new HashMap<>();
+
         switch (loginType) {
             case WX:
-                authenticationService.code2Wx(tokenDTO.getAccount());
+                token = authenticationService.code2session(tokenDTO.getAccount());
                 break;
             case EMAIL:
                 // 数据库里去找用户
@@ -35,7 +38,8 @@ public class TokenController {
                 throw new NotFoundException(10003);
         }
 
+        map.put("token", token);
 
-        return null;
+        return map;
     }
 }

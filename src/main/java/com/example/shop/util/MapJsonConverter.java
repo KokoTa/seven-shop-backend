@@ -22,7 +22,6 @@ public class MapJsonConverter implements AttributeConverter<Map<String, Object>,
     @Override
     public String convertToDatabaseColumn(Map<String, Object> stringObjectMap) {
         try {
-            if (stringObjectMap == null) return "";
             return objectMapper.writeValueAsString(stringObjectMap);
         } catch (JsonProcessingException e) {
             e.printStackTrace();

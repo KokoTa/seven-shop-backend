@@ -19,7 +19,6 @@ public class GenericJsonConverter {
 
     public static <T> String objectToJson(T o) {
         try {
-            if (o == null) return "";
             return GenericJsonConverter.objectMapper.writeValueAsString(o);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
