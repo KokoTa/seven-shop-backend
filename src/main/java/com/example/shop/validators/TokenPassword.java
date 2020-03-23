@@ -8,7 +8,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
+@Target(ElementType.FIELD) // 标注在属性上
 @Constraint(validatedBy = TokenPasswordValidator.class)
 public @interface TokenPassword {
     String message() default "密码长度错误";

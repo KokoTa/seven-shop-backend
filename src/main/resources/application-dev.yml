@@ -1,6 +1,6 @@
 condition:
   jwt-key: KokoTaSecret # 盐
-  token-expired: 86400000 # 单位秒
+  token-expired: 604800 # 过期时间为 7 天
 
 spring:
   datasource:

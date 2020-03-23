@@ -4,6 +4,7 @@ import com.example.shop.core.enumeration.LoginType;
 import com.example.shop.dto.TokenDTO;
 import com.example.shop.exception.http.NotFoundException;
 import com.example.shop.service.AuthenticationService;
+import com.example.shop.util.JwtToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,6 +41,14 @@ public class TokenController {
 
         map.put("token", token);
 
+        return map;
+    }
+
+    @PostMapping("/verify")
+    public Map<String, Boolean> tokenVerify(@RequestBody Map<String, String> data) {
+        Map<String, Boolean> map = new HashMap<>();
+        Boolean valid = JwtToken.verify(data.get("token"));
+        map.put("is_valid", valid);
         return map;
     }
 }

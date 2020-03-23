@@ -28,9 +28,22 @@ Page({
     })
   },
 
+  onTestToken() {
+    wx.request({
+      url: 'http://localhost:8081/v1/banner/name/b-1',
+      method: 'get',
+      header: {
+        'Authorization': 'Bearer ' + wx.getStorageSync('token')
+      },
+      success: res => {
+        console.log(res.data)
+      }
+    })
+  },
+
   onVerifyToken() {
     wx.request({
-      url: 'http://localhost:3000/v1/token/verify',
+      url: 'http://localhost:8081/v1/token/verify',
       method: 'POST',
       data: {
         token: wx.getStorageSync('token')

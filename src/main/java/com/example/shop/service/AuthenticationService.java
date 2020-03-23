@@ -55,7 +55,7 @@ public class AuthenticationService {
         return token;
     }
 
-    public String registerUser(Map<String, Object> session) {
+    private String registerUser(Map<String, Object> session) {
         String openid = (String) session.get("openid");
         if (openid == null) throw new ParameterException(20004);
 
