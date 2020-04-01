@@ -8,7 +8,9 @@ import org.springframework.beans.BeanUtils;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -28,5 +30,9 @@ public class CouponPureVO {
 
     public CouponPureVO(Coupon coupon) {
         BeanUtils.copyProperties(coupon, this);
+    }
+
+    public static List<CouponPureVO> getList(List<Coupon> list) {
+        return list.stream().map(CouponPureVO::new).collect(Collectors.toList());
     }
 }
