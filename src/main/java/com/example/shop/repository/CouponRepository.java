@@ -1,6 +1,7 @@
 package com.example.shop.repository;
 
 import com.example.shop.model.Coupon;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -17,6 +18,16 @@ public interface CouponRepository extends JpaRepository<Coupon, Long> {
             "join\n" +
             "Activity a on a.id = c.activityId\n" +
             "where ca.id = :cid\n" +
-            "and a.endTime > :now  ")
-    List<Coupon> findByCategory(Long cid, Date now);
+            "and a.startTime < :now\n" +
+            "and a.endTime > :now")
+    List<Coupon> findByCategory(Long cid, Date now, Pageable pageable);
+
+    @Query(value = "select c from Coupon c\n" +
+            "join\n" +
+            "Activity a on c.activityId = a.id\n" +
+            "where c.wholeStore = :isWholeStore\n" +
+            "and a.startTime < :now\n" +
+            "and a.endTime > :now\n" +
+            "\n")
+    List<Coupon> findByWholeStore(Boolean isWholeStore, Date now);
 }

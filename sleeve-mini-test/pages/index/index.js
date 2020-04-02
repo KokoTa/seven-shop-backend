@@ -54,16 +54,16 @@ Page({
     })
   },
 
-  onGetLatest() {
+  onCollectCoupon() {
     wx.request({
-      url: 'http://localhost:3000/v1/classic/latest',
-      method: 'GET',
+      url: 'http://localhost:8081/v1/coupon/collect/4',
+      method: 'POST',
       success: res => {
         console.log(res.data)
       },
       header: {
-        Authorization: this._encode()
-      }
+        'Authorization': 'Bearer ' + wx.getStorageSync('token')
+      },
     })
   },
 
