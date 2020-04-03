@@ -28,11 +28,13 @@ public class Sku extends BaseEntity {
     private Long categoryId;
     private Long rootCategoryId;
 
+//    JSON 转换方式 1
 //    @Convert(converter = ListJsonConverter.class)
 //    private List<Spec> specs;
 //    @Convert(converter = MapJsonConverter.class)
 //    private Map<String, Object> test;
 
+//    JSON 转换方式 2
     private String specs;
     private String test;
 

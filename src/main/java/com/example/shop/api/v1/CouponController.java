@@ -5,7 +5,6 @@ import com.example.shop.core.enumeration.CouponStatus;
 import com.example.shop.core.local.LocalUser;
 import com.example.shop.exception.http.ParameterException;
 import com.example.shop.model.Coupon;
-import com.example.shop.model.User;
 import com.example.shop.model.UserCoupon;
 import com.example.shop.service.CouponService;
 import com.example.shop.vo.CouponCategoryVO;
@@ -14,7 +13,6 @@ import com.example.shop.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -100,6 +98,10 @@ public class CouponController {
         return CouponPureVO.getList(couponList);
     }
 
+    /**
+     * 获取用户可用优惠券（带分类）
+     * @return
+     */
     @ScopeLevel
     @GetMapping("/myself/available/with_category")
     public List<CouponCategoryVO> getUserCouponWithCategory() {
