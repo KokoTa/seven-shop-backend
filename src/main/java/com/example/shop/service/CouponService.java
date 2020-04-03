@@ -12,7 +12,6 @@ import com.example.shop.repository.UserCouponRepository;
 import com.example.shop.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -51,7 +50,9 @@ public class CouponService {
         if (!isValid) throw new NotFoundException(40005);
 
         // 检查用户是否持有该优惠券
-        userCouponRepository.findFirstByUserIdAndCouponId(uid, couponId).orElseThrow(() -> new ParameterException(40006));
+        userCouponRepository.findFirstByUserIdAndCouponId(uid, couponId).ifPresent((uc) -> {
+            throw new ParameterException(40006);
+        });
 
         // 给用户加优惠券
         UserCoupon userCoupon = UserCoupon.builder()
@@ -64,5 +65,20 @@ public class CouponService {
         userCouponRepository.save(userCoupon);
 
         return userCoupon;
+    }
+
+    public List<Coupon> getMyAvailableCoupons(Long id) {
+        Date now = new Date();
+        return couponRepository.findMyAvailable(id, now);
+    }
+
+    public List<Coupon> getMyUsedCoupons(Long id) {
+        Date now = new Date();
+        return couponRepository.findMyUsed(id, now);
+    }
+
+    public List<Coupon> getMyExpiredCoupons(Long id) {
+        Date now = new Date();
+        return couponRepository.findMyExpired(id, now);
     }
 }
