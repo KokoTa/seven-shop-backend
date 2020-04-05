@@ -1,5 +1,6 @@
 package com.example.shop.service;
 
+import com.example.shop.core.money.IMoney;
 import com.example.shop.dto.OrderDTO;
 import com.example.shop.dto.SkuInfoDTO;
 import com.example.shop.exception.http.NotFoundException;
@@ -29,6 +30,9 @@ public class OrderService {
     @Autowired
     private UserCouponRepository userCouponRepository;
 
+    @Autowired
+    private IMoney upRound;
+
     /**
      * 订单数据是否正确
      */
@@ -55,7 +59,8 @@ public class OrderService {
             Coupon coupon = couponRepository.findById(couponId).orElseThrow(() -> new NotFoundException(40003));
             // 报错表示用户没有这张优惠券
             UserCoupon userCoupon = userCouponRepository.findFirstByUserIdAndCouponId(uid, couponId).orElseThrow(() -> new NotFoundException(40007));
-            couponChecker = new CouponChecker(coupon, userCoupon);
+            // 价格校验
+            couponChecker = new CouponChecker(coupon, userCoupon, upRound);
         }
     }
 }

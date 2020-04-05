@@ -17,7 +17,7 @@ import javax.validation.Valid;
 public class OrderController {
 
     @ScopeLevel
-    @PostMapping("")
+    @PostMapping("/")
     public void placeOrder(
             @RequestBody @Valid OrderDTO orderDTO
     ) {
