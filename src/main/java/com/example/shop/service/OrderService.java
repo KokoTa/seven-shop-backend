@@ -1,5 +1,6 @@
 package com.example.shop.service;
 
+import com.example.shop.core.enumeration.OrderStatus;
 import com.example.shop.core.money.IMoney;
 import com.example.shop.dto.OrderDTO;
 import com.example.shop.dto.SkuInfoDTO;
@@ -8,10 +9,12 @@ import com.example.shop.exception.http.ParameterException;
 import com.example.shop.logic.CouponChecker;
 import com.example.shop.logic.OrderChecker;
 import com.example.shop.model.Coupon;
+import com.example.shop.model.Order;
 import com.example.shop.model.Sku;
 import com.example.shop.model.UserCoupon;
 import com.example.shop.repository.CouponRepository;
 import com.example.shop.repository.UserCouponRepository;
+import com.example.shop.util.OrderUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -69,5 +72,24 @@ public class OrderService {
         OrderChecker orderChecker = new OrderChecker(orderDTO, skuList, couponChecker, maxSkuLimit);
         orderChecker.isOK();
         return orderChecker;
+    }
+
+    /**
+     * 创建订单
+     */
+    public void placeOrder(Long uid, OrderDTO orderDTO, OrderChecker orderChecker) {
+        String orderNo = OrderUtil.makeOrderNo(); // 生成订单号
+
+        Order order = Order.builder()
+                .orderNo(orderNo)
+                .totalPrice(orderDTO.getTotalPrice())
+                .finalTotalPrice(orderDTO.getFinalTotalPrice())
+                .userId(uid)
+                .totalCount(orderChecker.getTotalCount())
+                .snapImg(orderChecker.getSnapImg())
+                .snapTitle(orderChecker.getSnapTitle())
+//                .status(OrderStatus.PAID);
+//                .snapAddress(orderDTO.getAddress())
+
     }
 }
