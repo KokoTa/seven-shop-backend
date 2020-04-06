@@ -5,6 +5,8 @@ import com.example.shop.repository.SkuRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -14,6 +16,13 @@ public class SkuService {
     SkuRepository skuRepository;
 
     public List<Sku> getSkuListByIds(List<Long> ids) {
+        // 升序
+        ids.sort(new Comparator<Long>() {
+            @Override
+            public int compare(Long o1, Long o2) {
+                return o1.compareTo(o2);
+            }
+        });
         return skuRepository.findAllByIdIn(ids);
     }
 }

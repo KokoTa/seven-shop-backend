@@ -1,6 +1,7 @@
 condition:
   jwt-key: KokoTaSecret # 盐
   token-expired: 604800 # 过期时间为 7 天
+  max-sku-limit: 100 # 单品购买上限
 
 spring:
   datasource:

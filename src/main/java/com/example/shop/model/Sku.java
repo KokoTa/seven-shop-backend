@@ -5,15 +5,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
 @Setter
+@Where(clause = "delete_time is null and online = 1")
 public class Sku extends BaseEntity {
     @Id
     private Long id;
@@ -70,5 +73,16 @@ public class Sku extends BaseEntity {
         } else {
             this.test = GenericJsonConverter.objectToJson(test);
         }
+    }
+
+    public BigDecimal getActualPrice() {
+        return discountPrice == null ? price : discountPrice;
+    }
+
+    @JsonIgnore
+    public List<String> getSpecValueList() {
+        return getSpecs().stream()
+                .map(Spec::getValue)
+                .collect(Collectors.toList());
     }
 }
