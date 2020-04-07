@@ -67,15 +67,16 @@ Page({
     })
   },
 
-  onGetNext() {
+  onCreateOrder() {
     wx.request({
-      url: 'http://localhost:3000/v1/classic/6/next',
-      method: 'GET',
+      url: 'http://localhost:8081/v1/order',
+      method: 'POST',
+      data: { "total_price": 1, "final_total_price": 1, "coupon_id": null, "sku_info_list": [{ "id": 15, "count": "5" }], "address": { "user_name": "张三", "national_code": "510000", "postal_code": "510000", "city": "广州市", "province": "广东省", "county": "海珠区", "detail": "397号", "mobile": "020-811" } },
       success: res => {
         console.log(res.data)
       },
       header: {
-        Authorization: this._encode()
+        'Authorization': 'Bearer ' + wx.getStorageSync('token')
       }
     })
   },
