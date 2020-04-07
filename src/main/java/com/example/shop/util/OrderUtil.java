@@ -1,10 +1,12 @@
 package com.example.shop.util;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.Calendar;
 
+@Component
 public class OrderUtil {
     // B3230651812529
     private static String[] yearCodes;

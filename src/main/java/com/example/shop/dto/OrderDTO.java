@@ -1,5 +1,6 @@
 package com.example.shop.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +17,6 @@ public class OrderDTO {
     private BigDecimal totalPrice; // 原价
     private BigDecimal finalTotalPrice; // 最终价
     private Long couponId; // 优惠券
-    private List<SkuInfoDTO> skuInfoList; // sku快照
-    private OrderAddressDTO address; // 地址快照
+    private List<SkuInfoDTO> skuInfoList; // sku信息
+    private OrderAddressDTO address; // 地址信息
 }

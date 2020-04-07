@@ -8,16 +8,16 @@ import com.example.shop.exception.http.NotFoundException;
 import com.example.shop.exception.http.ParameterException;
 import com.example.shop.logic.CouponChecker;
 import com.example.shop.logic.OrderChecker;
-import com.example.shop.model.Coupon;
-import com.example.shop.model.Order;
-import com.example.shop.model.Sku;
-import com.example.shop.model.UserCoupon;
+import com.example.shop.model.*;
 import com.example.shop.repository.CouponRepository;
+import com.example.shop.repository.OrderRepository;
+import com.example.shop.repository.SkuRepository;
 import com.example.shop.repository.UserCouponRepository;
 import com.example.shop.util.OrderUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -34,6 +34,12 @@ public class OrderService {
 
     @Autowired
     private UserCouponRepository userCouponRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private SkuRepository skuRepository;
 
     @Autowired
     private IMoney upRound;
@@ -63,7 +69,7 @@ public class OrderService {
             // 报错表示没有这张优惠券
             Coupon coupon = couponRepository.findById(couponId).orElseThrow(() -> new NotFoundException(40003));
             // 报错表示用户没有这张优惠券
-            UserCoupon userCoupon = userCouponRepository.findFirstByUserIdAndCouponId(uid, couponId).orElseThrow(() -> new NotFoundException(40007));
+            UserCoupon userCoupon = userCouponRepository.findFirstByUserIdAndCouponIdAndOrderIdIsNull(uid, couponId).orElseThrow(() -> new NotFoundException(40007));
             // 优惠券校验器
             couponChecker = new CouponChecker(coupon, upRound);
         }
@@ -77,9 +83,11 @@ public class OrderService {
     /**
      * 创建订单
      */
-    public void placeOrder(Long uid, OrderDTO orderDTO, OrderChecker orderChecker) {
+    @Transactional
+    public Long placeOrder(Long uid, OrderDTO orderDTO, OrderChecker orderChecker) {
         String orderNo = OrderUtil.makeOrderNo(); // 生成订单号
 
+        // 构建订单
         Order order = Order.builder()
                 .orderNo(orderNo)
                 .totalPrice(orderDTO.getTotalPrice())
@@ -88,8 +96,35 @@ public class OrderService {
                 .totalCount(orderChecker.getTotalCount())
                 .snapImg(orderChecker.getSnapImg())
                 .snapTitle(orderChecker.getSnapTitle())
-//                .status(OrderStatus.PAID);
-//                .snapAddress(orderDTO.getAddress())
+                .status(OrderStatus.UNPAID.value())
+                .build();
 
+        order.setSnapItems(orderChecker.getOrderSkuList());
+        order.setSnapAddress(orderDTO.getAddress());
+
+        // 创建订单
+        orderRepository.save(order);
+        // 减去库存
+        reduceStock(orderChecker);
+        // 核销优惠券
+        if (orderDTO.getCouponId() != null) {
+            changeCouponStatus(orderDTO.getCouponId(), order.getId(), uid);
+        }
+        // 信息加入到延迟消息队列（未付款，时间到后要归还库存和优惠券）
+
+        return order.getId();
+    }
+
+    private void reduceStock(OrderChecker orderChecker) {
+        List<OrderSku> orderSkuList = orderChecker.getOrderSkuList();
+        for (OrderSku orderSku : orderSkuList) {
+            Integer result = skuRepository.reduceStock(orderSku.getId(), orderSku.getCount());
+            if (result != 1) throw new ParameterException(50003);
+        }
+    }
+
+    private void changeCouponStatus(Long couponId, Long orderId, Long uid) {
+        Integer result = userCouponRepository.changeCouponStatus(couponId, orderId, uid);
+        if (result != 1) throw new ParameterException(50006);
     }
 }

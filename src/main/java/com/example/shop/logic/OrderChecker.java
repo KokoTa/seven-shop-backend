@@ -18,7 +18,7 @@ import java.util.List;
  * 2. 检查 SKU 是否售罄、是否超出库存、是否超出限额
  * 3. 验证前端传过来的原始总价格(未使用优惠券时的总价)和后端的原始总价格是否一致
  * 4. 优惠券校验
- * 5. 返回快照信息
+ * 5. 返回订单快照信息
  */
 public class OrderChecker {
 
@@ -52,7 +52,7 @@ public class OrderChecker {
             this.skuBeyondStockCheck(sku, skuInfoDTO); // 是否超出库存
             this.skuBeyondLimitCheck(skuInfoDTO); // 是否超出限额
 
-            serverTotalPrice.add(calculateSkuPrice(sku, skuInfoDTO)); // 计算总价
+            serverTotalPrice = serverTotalPrice.add(calculateSkuPrice(sku, skuInfoDTO)); // 计算总价
             skuOrderBOList.add(new SkuOrderBO(sku, skuInfoDTO)); // 在优惠券校验中使用
             orderSkuList.add(new OrderSku(sku, skuInfoDTO)); // SKU 快照
         }
@@ -76,12 +76,12 @@ public class OrderChecker {
         return serverSkuList.get(0).getTitle();
     }
 
-    public Integer getTotalCount() {
+    public Long getTotalCount() {
         return orderDTO.getSkuInfoList()
                 .stream()
                 .map(SkuInfoDTO::getCount)
-                .reduce(Integer::sum)
-                .orElse(0);
+                .reduce(Long::sum)
+                .orElse((long) 0);
 
     }
 

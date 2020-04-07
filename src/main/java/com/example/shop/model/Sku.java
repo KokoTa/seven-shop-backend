@@ -33,7 +33,7 @@ public class Sku extends BaseEntity {
 
 //    JSON 转换方式 1
 //    @Convert(converter = ListJsonConverter.class)
-//    private List<Spec> specs;
+//    private List<Object> specs;
 //    @Convert(converter = MapJsonConverter.class)
 //    private Map<String, Object> test;
 

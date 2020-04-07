@@ -50,7 +50,7 @@ public class CouponService {
         if (!isValid) throw new NotFoundException(40005);
 
         // 检查用户是否持有该优惠券
-        userCouponRepository.findFirstByUserIdAndCouponId(uid, couponId).ifPresent((uc) -> {
+        userCouponRepository.findFirstByUserIdAndCouponIdAndOrderIdIsNull(uid, couponId).ifPresent((uc) -> {
             throw new ParameterException(40006);
         });
 
