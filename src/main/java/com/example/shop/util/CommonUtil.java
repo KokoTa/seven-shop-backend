@@ -2,6 +2,7 @@ package com.example.shop.util;
 
 import com.example.shop.bo.PageCounter;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class CommonUtil {
@@ -29,5 +30,16 @@ public class CommonUtil {
         long startTime = start.getTime();
         long endTime = end.getTime();
         return time > startTime && time < endTime;
+    }
+
+    /**
+     * 获取当前时间加上一段时间后的时间
+     * @param seconds
+     * @return
+     */
+    public static Calendar getExpiredTime(Integer seconds) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.SECOND, seconds);
+        return calendar;
     }
 }

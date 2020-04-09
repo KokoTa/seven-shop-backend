@@ -1,6 +1,7 @@
 package com.example.shop.service;
 
 import com.example.shop.core.enumeration.OrderStatus;
+import com.example.shop.core.local.LocalUser;
 import com.example.shop.core.money.IMoney;
 import com.example.shop.dto.OrderDTO;
 import com.example.shop.dto.SkuInfoDTO;
@@ -13,14 +14,22 @@ import com.example.shop.repository.CouponRepository;
 import com.example.shop.repository.OrderRepository;
 import com.example.shop.repository.SkuRepository;
 import com.example.shop.repository.UserCouponRepository;
+import com.example.shop.util.CommonUtil;
 import com.example.shop.util.OrderUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,6 +55,9 @@ public class OrderService {
 
     @Value("${condition.max-sku-limit}")
     private Integer maxSkuLimit;
+
+    @Value("${condition.pay-time-limit}")
+    private Integer payTimeLimit;
 
     /**
      * 订单数据是否正确
@@ -86,6 +98,9 @@ public class OrderService {
     @Transactional
     public Long placeOrder(Long uid, OrderDTO orderDTO, OrderChecker orderChecker) {
         String orderNo = OrderUtil.makeOrderNo(); // 生成订单号
+        Date placedTime = Calendar.getInstance().getTime(); // 这里不能以数据库生成的 createTime 作为订单创建时间，会有误差
+        Date expiredTime = CommonUtil.getExpiredTime(payTimeLimit).getTime(); // 订单过期时间
+
 
         // 构建订单
         Order order = Order.builder()
@@ -97,6 +112,8 @@ public class OrderService {
                 .snapImg(orderChecker.getSnapImg())
                 .snapTitle(orderChecker.getSnapTitle())
                 .status(OrderStatus.UNPAID.value())
+                .placedTime(placedTime)
+                .expiredTime(expiredTime)
                 .build();
 
         order.setSnapItems(orderChecker.getOrderSkuList());
@@ -113,6 +130,41 @@ public class OrderService {
         // 信息加入到延迟消息队列（未付款，时间到后要归还库存和优惠券）
 
         return order.getId();
+    }
+
+    /**
+     * 获取未支付订单
+     * @param page
+     * @param size
+     * @return
+     */
+    public Page<Order> getUnpaid(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createTime").descending());
+        Long uid = LocalUser.getUser().getId();
+        Date now = new Date();
+        return orderRepository.findAllByExpiredTimeGreaterThanAndStatusAndUserId(now, OrderStatus.UNPAID.value(), uid, pageable);
+    }
+
+    /**
+     * 根据状态查询订单（不提供未支付订单的查询）
+     * @param status
+     * @param page
+     * @param size
+     * @return
+     */
+    public Page<Order> getByStatus(Integer status, Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createTime").descending());
+        Long uid = LocalUser.getUser().getId();
+
+        if (status == OrderStatus.UNPAID.value()) throw new ParameterException(50011);
+        if (status == OrderStatus.All.value()) return orderRepository.findByUserId(uid, pageable);
+        return orderRepository.findByUserIdAndStatus(uid, status, pageable);
+    }
+
+    public Order getOrderDetail(Long id) {
+        Long uid = LocalUser.getUser().getId();
+        Optional<Order> order = orderRepository.findFirstByUserIdAndId(uid, id);
+        return order.orElseThrow(() -> new ParameterException(50012));
     }
 
     private void reduceStock(OrderChecker orderChecker) {

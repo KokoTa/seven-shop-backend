@@ -3,6 +3,7 @@ condition:
   token-expired: 604800 # 过期时间为 7 天
   max-sku-limit: 100 # 单品购买上限
   year-codes: A,B,C,D,E,F,G,H,I,J,K,L # A 表示 2019 年
+  pay-time-limit: 3600 # 订单失效时间，3600秒
 
 spring:
   datasource:

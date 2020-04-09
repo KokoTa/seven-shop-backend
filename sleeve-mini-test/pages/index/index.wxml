@@ -6,11 +6,13 @@
 
 <l-button type="warning" l-class="btn" size="long" bind:lintap="onCreateOrder">创建订单(无优惠券)</l-button>
 
-<l-button type="warning" l-class="btn" size="long" bind:lintap="onGetNext">获取下一期</l-button>
+<l-button type="warning" l-class="btn" size="long" bind:lintap="onCreateOrder2">创建订单(有优惠券)</l-button>
 
-<l-button type="warning" l-class="btn" size="long" bind:lintap="onGetPrevious">获取上一期</l-button>
+<l-button type="warning" l-class="btn" size="long" bind:lintap="onGetUnpaidOrders">获取未支付订单</l-button>
 
-<l-button type="warning" l-class="btn" size="long" bind:lintap="onGetMyFavorList">获取我喜欢的期刊</l-button>
+<l-button type="warning" l-class="btn" size="long" bind:lintap="onGetAllOrders">获取所有订单</l-button>
+
+<l-button type="warning" l-class="btn" size="long" bind:lintap="onGetOrderDetail">查询订单详情</l-button>
 
 <l-button type="warning" l-class="btn" size="long" bind:lintap="onGetClassicDetail">获取期刊详情</l-button>
 

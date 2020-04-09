@@ -11,6 +11,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -21,7 +22,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Where(clause = "delete_tim is null")
+@Where(clause = "delete_time is null")
 @Table(name = "`Order`") // 由于是关键字，所以需要加指明表名
 public class Order extends BaseEntity {
     @Id
@@ -36,6 +37,8 @@ public class Order extends BaseEntity {
     private String prepayId;
     private BigDecimal finalTotalPrice;
     private Integer status;
+    private Date expiredTime;
+    private Date placedTime;
 
     private String snapItems;
     private String snapAddress;

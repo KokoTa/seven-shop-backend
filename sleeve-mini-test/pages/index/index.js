@@ -56,7 +56,7 @@ Page({
 
   onCollectCoupon() {
     wx.request({
-      url: 'http://localhost:8081/v1/coupon/collect/4',
+      url: 'http://localhost:8081/v1/coupon/collect/7',
       method: 'POST',
       success: res => {
         console.log(res.data)
@@ -81,41 +81,55 @@ Page({
     })
   },
 
-  onGetPrevious() {
+  onCreateOrder2() {
     wx.request({
-      url: 'http://localhost:3000/v1/classic/6/previous',
-      method: 'GET',
+      url: 'http://localhost:8081/v1/order',
+      method: 'POST',
+      data: { "total_price": 2798, "final_total_price": 2568, "coupon_id": 7, "sku_info_list": [{ "id": 30, "count": 2 }], "address": { "user_name": "张三", "national_code": "510000", "postal_code": "510000", "city": "广州市", "province": "广东省", "county": "海珠区", "detail": "397号", "mobile": "020-8118" } },
       success: res => {
         console.log(res.data)
       },
       header: {
-        Authorization: this._encode()
+        'Authorization': 'Bearer ' + wx.getStorageSync('token')
       }
     })
   },
 
-  onGetClassicFavor() {
+  onGetUnpaidOrders() {
     wx.request({
-      url: 'http://localhost:3000/v1/classic/100/1/favor',
+      url: 'http://localhost:8081/v1/order/status/unpaid',
       method: 'GET',
       success: res => {
         console.log(res.data)
       },
       header: {
-        Authorization: this._encode()
+        'Authorization': 'Bearer ' + wx.getStorageSync('token')
       }
     })
   },
 
-  onGetMyFavorList() {
+  onGetAllOrders() {
     wx.request({
-      url: 'http://localhost:3000/v1/classic/favor',
+      url: 'http://localhost:8081/v1/order/by/status/0',
       method: 'GET',
       success: res => {
         console.log(res.data)
       },
       header: {
-        Authorization: this._encode()
+        'Authorization': 'Bearer ' + wx.getStorageSync('token')
+      }
+    })
+  },
+
+  onGetOrderDetail() {
+    wx.request({
+      url: 'http://localhost:8081/v1/order/detail/320',
+      method: 'GET',
+      success: res => {
+        console.log(res.data)
+      },
+      header: {
+        'Authorization': 'Bearer ' + wx.getStorageSync('token')
       }
     })
   },
