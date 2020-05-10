@@ -38,10 +38,8 @@ public class OrderController {
 
     @ScopeLevel
     @GetMapping("/status/unpaid")
-    public PagingDozer<Order, OrderPureVO> getUnpaid(
-            @RequestParam(defaultValue = "0") Integer start,
-            @RequestParam(defaultValue = "10") Integer count
-    ) {
+    public PagingDozer<Order, OrderPureVO> getUnpaid(@RequestParam(defaultValue = "0") Integer start,
+            @RequestParam(defaultValue = "10") Integer count) {
         PageCounter page = CommonUtil.convertToPageParameter(start, count);
         Page<Order> orderPage = orderService.getUnpaid(page.getPageNo(), page.getPageSize());
         PagingDozer<Order, OrderPureVO> pagingDozer = new PagingDozer<>(orderPage, OrderPureVO.class);
@@ -51,11 +49,8 @@ public class OrderController {
 
     @ScopeLevel
     @GetMapping("/by/status/{status}")
-    public PagingDozer<Order, OrderPureVO> getByStatus(
-            @PathVariable Integer status,
-            @RequestParam(defaultValue = "0") Integer start,
-            @RequestParam(defaultValue = "10") Integer count
-    ) {
+    public PagingDozer<Order, OrderPureVO> getByStatus(@PathVariable Integer status,
+            @RequestParam(defaultValue = "0") Integer start, @RequestParam(defaultValue = "10") Integer count) {
         PageCounter page = CommonUtil.convertToPageParameter(start, count);
         Page<Order> orderPage = orderService.getByStatus(status, page.getPageNo(), page.getPageSize());
         PagingDozer<Order, OrderPureVO> pagingDozer = new PagingDozer<>(orderPage, OrderPureVO.class);

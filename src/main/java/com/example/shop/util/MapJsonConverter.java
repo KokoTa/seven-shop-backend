@@ -32,7 +32,8 @@ public class MapJsonConverter implements AttributeConverter<Map<String, Object>,
     @Override
     public Map<String, Object> convertToEntityAttribute(String s) {
         try {
-            if (s == null) return null;
+            if (s == null)
+                return null;
             return objectMapper.readValue(s, HashMap.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();

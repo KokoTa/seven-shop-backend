@@ -68,10 +68,7 @@ public class OrderService {
             throw new ParameterException(50001);
         }
 
-        List<Long> skuIdList = orderDTO.getSkuInfoList()
-                .stream()
-                .map(SkuInfoDTO::getId)
-                .collect(Collectors.toList());
+        List<Long> skuIdList = orderDTO.getSkuInfoList().stream().map(SkuInfoDTO::getId).collect(Collectors.toList());
         List<Sku> skuList = skuService.getSkuListByIds(skuIdList);
 
         Long couponId = orderDTO.getCouponId();
@@ -81,7 +78,8 @@ public class OrderService {
             // 报错表示没有这张优惠券
             Coupon coupon = couponRepository.findById(couponId).orElseThrow(() -> new NotFoundException(40003));
             // 报错表示用户没有这张优惠券
-            UserCoupon userCoupon = userCouponRepository.findFirstByUserIdAndCouponIdAndOrderIdIsNull(uid, couponId).orElseThrow(() -> new NotFoundException(40007));
+            userCouponRepository.findFirstByUserIdAndCouponIdAndOrderIdIsNull(uid, couponId)
+                    .orElseThrow(() -> new NotFoundException(40007));
             // 优惠券校验器
             couponChecker = new CouponChecker(coupon, upRound);
         }
@@ -101,20 +99,11 @@ public class OrderService {
         Date placedTime = Calendar.getInstance().getTime(); // 这里不能以数据库生成的 createTime 作为订单创建时间，会有误差
         Date expiredTime = CommonUtil.getExpiredTime(payTimeLimit).getTime(); // 订单过期时间
 
-
         // 构建订单
-        Order order = Order.builder()
-                .orderNo(orderNo)
-                .totalPrice(orderDTO.getTotalPrice())
-                .finalTotalPrice(orderDTO.getFinalTotalPrice())
-                .userId(uid)
-                .totalCount(orderChecker.getTotalCount())
-                .snapImg(orderChecker.getSnapImg())
-                .snapTitle(orderChecker.getSnapTitle())
-                .status(OrderStatus.UNPAID.value())
-                .placedTime(placedTime)
-                .expiredTime(expiredTime)
-                .build();
+        Order order = Order.builder().orderNo(orderNo).totalPrice(orderDTO.getTotalPrice())
+                .finalTotalPrice(orderDTO.getFinalTotalPrice()).userId(uid).totalCount(orderChecker.getTotalCount())
+                .snapImg(orderChecker.getSnapImg()).snapTitle(orderChecker.getSnapTitle())
+                .status(OrderStatus.UNPAID.value()).placedTime(placedTime).expiredTime(expiredTime).build();
 
         order.setSnapItems(orderChecker.getOrderSkuList());
         order.setSnapAddress(orderDTO.getAddress());
@@ -134,6 +123,7 @@ public class OrderService {
 
     /**
      * 获取未支付订单
+     * 
      * @param page
      * @param size
      * @return
@@ -142,11 +132,13 @@ public class OrderService {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createTime").descending());
         Long uid = LocalUser.getUser().getId();
         Date now = new Date();
-        return orderRepository.findAllByExpiredTimeGreaterThanAndStatusAndUserId(now, OrderStatus.UNPAID.value(), uid, pageable);
+        return orderRepository.findAllByExpiredTimeGreaterThanAndStatusAndUserId(now, OrderStatus.UNPAID.value(), uid,
+                pageable);
     }
 
     /**
      * 根据状态查询订单（不提供未支付订单的查询）
+     * 
      * @param status
      * @param page
      * @param size
@@ -156,8 +148,10 @@ public class OrderService {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createTime").descending());
         Long uid = LocalUser.getUser().getId();
 
-        if (status == OrderStatus.UNPAID.value()) throw new ParameterException(50011);
-        if (status == OrderStatus.All.value()) return orderRepository.findByUserId(uid, pageable);
+        if (status == OrderStatus.UNPAID.value())
+            throw new ParameterException(50011);
+        if (status == OrderStatus.All.value())
+            return orderRepository.findByUserId(uid, pageable);
         return orderRepository.findByUserIdAndStatus(uid, status, pageable);
     }
 
@@ -171,12 +165,14 @@ public class OrderService {
         List<OrderSku> orderSkuList = orderChecker.getOrderSkuList();
         for (OrderSku orderSku : orderSkuList) {
             Integer result = skuRepository.reduceStock(orderSku.getId(), orderSku.getCount());
-            if (result != 1) throw new ParameterException(50003);
+            if (result != 1)
+                throw new ParameterException(50003);
         }
     }
 
     private void changeCouponStatus(Long couponId, Long orderId, Long uid) {
         Integer result = userCouponRepository.changeCouponStatus(couponId, orderId, uid);
-        if (result != 1) throw new ParameterException(50006);
+        if (result != 1)
+            throw new ParameterException(50006);
     }
 }

@@ -1,7 +1,6 @@
 package com.example.shop.vo;
 
 import com.example.shop.model.Activity;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

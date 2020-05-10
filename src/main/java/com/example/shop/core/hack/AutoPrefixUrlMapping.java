@@ -1,13 +1,11 @@
 package com.example.shop.core.hack;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import java.lang.reflect.Method;
 import java.util.regex.Pattern;
-
 
 public class AutoPrefixUrlMapping extends RequestMappingHandlerMapping {
 
@@ -21,7 +19,8 @@ public class AutoPrefixUrlMapping extends RequestMappingHandlerMapping {
             String prefix = this.getPrefix(handlerType);
             if (prefix != null) {
                 // path 前缀，build 构建一个新 info，combine 合并另一个 info
-                RequestMappingInfo newRequestMappingInfo = RequestMappingInfo.paths(prefix).build().combine(mappingInfo);
+                RequestMappingInfo newRequestMappingInfo = RequestMappingInfo.paths(prefix).build()
+                        .combine(mappingInfo);
                 return newRequestMappingInfo;
             }
         }

@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.AttributeConverter;
-import java.util.HashMap;
 import java.util.List;
 
 public class ListJsonConverter implements AttributeConverter<List<Object>, String> {
@@ -27,7 +26,8 @@ public class ListJsonConverter implements AttributeConverter<List<Object>, Strin
     @Override
     public List<Object> convertToEntityAttribute(String s) {
         try {
-            if (s == null) return null;
+            if (s == null)
+                return null;
             return objectMapper.readValue(s, List.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();

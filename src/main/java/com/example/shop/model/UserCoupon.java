@@ -3,9 +3,7 @@ package com.example.shop.model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Date;
-import java.util.Objects;
 
 @Entity
 @Getter

@@ -5,9 +5,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Getter
@@ -27,9 +25,6 @@ public class Theme extends BaseEntity {
     private Boolean online;
 
     @OneToMany
-    @JoinTable(
-            name = "theme_spu",
-            joinColumns = @JoinColumn(name = "theme_id"),
-            inverseJoinColumns = @JoinColumn(name ="spu_id"))
+    @JoinTable(name = "theme_spu", joinColumns = @JoinColumn(name = "theme_id"), inverseJoinColumns = @JoinColumn(name = "spu_id"))
     private List<Spu> spuList;
 }

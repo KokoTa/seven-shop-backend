@@ -5,7 +5,7 @@ condition:
   auto-prefix-api-package: com.example.shop.api
 wx:
   appid: wx1b13619a00914149
-  appsecret: d3f513878f1368a1aaed31d6482811a7
+  appsecret: 9216871f56c26d3acbd4ae1724dba112
   code2session:  https://api.weixin.qq.com/sns/jscode2session?appid={0}&secret={1}&js_code={2}&grant_type=authorization_code
 # 根据环境引入配置
 spring:

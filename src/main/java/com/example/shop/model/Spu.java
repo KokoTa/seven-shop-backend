@@ -1,14 +1,11 @@
 package com.example.shop.model;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Getter

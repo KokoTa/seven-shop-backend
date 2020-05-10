@@ -1,6 +1,5 @@
 package com.example.shop.service;
 
-import com.example.shop.dto.TokenDTO;
 import com.example.shop.exception.http.JsonConvertException;
 import com.example.shop.exception.http.ParameterException;
 import com.example.shop.model.User;
@@ -8,8 +7,6 @@ import com.example.shop.repository.UserRepository;
 import com.example.shop.util.JwtToken;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dozermapper.core.DozerBeanMapperBuilder;
-import com.github.dozermapper.core.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,7 +15,6 @@ import org.springframework.web.client.RestTemplate;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class AuthenticationService {
@@ -57,7 +53,8 @@ public class AuthenticationService {
 
     private String registerUser(Map<String, Object> session) {
         String openid = (String) session.get("openid");
-        if (openid == null) throw new ParameterException(20004);
+        if (openid == null)
+            throw new ParameterException(20004);
 
         User user = userRepository.findByOpenid(openid);
         if (user != null) {

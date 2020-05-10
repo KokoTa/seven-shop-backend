@@ -35,13 +35,13 @@ public class TestController {
     }
 
     @GetMapping("/testParams")
-    String testParamByQuery(
-            @RequestParam(name = "userId") @Min(10) Integer id,
-            @RequestParam(name = "userName") @Length(min = 2) String name
-    ) {
+    String testParamByQuery(@RequestParam(name = "userId") @Min(10) Integer id,
+            @RequestParam(name = "userName") @Length(min = 2) String name) {
         return id + " " + name;
     }
 
     @PostMapping("/testParams")
-    UserDTO testParamByBody(@RequestBody @Validated UserDTO user) { return user; }
+    UserDTO testParamByBody(@RequestBody @Validated UserDTO user) {
+        return user;
+    }
 }

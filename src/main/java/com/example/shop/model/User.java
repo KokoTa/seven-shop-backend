@@ -5,9 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Map;
-import java.util.Objects;
 
 @Entity
 @Getter

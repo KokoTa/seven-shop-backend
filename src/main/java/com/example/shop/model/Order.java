@@ -2,19 +2,14 @@ package com.example.shop.model;
 
 import com.example.shop.dto.OrderAddressDTO;
 import com.example.shop.util.GenericJsonConverter;
-import com.example.shop.util.ListJsonConverter;
-import com.example.shop.util.MapJsonConverter;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.*;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 @Entity
 @Getter
@@ -47,7 +42,8 @@ public class Order extends BaseEntity {
         if (this.snapItems == null) {
             return null;
         } else {
-            return GenericJsonConverter.jsonToObject(this.snapItems, new TypeReference<List<OrderSku>>() {});
+            return GenericJsonConverter.jsonToObject(this.snapItems, new TypeReference<List<OrderSku>>() {
+            });
         }
     }
 
@@ -63,7 +59,8 @@ public class Order extends BaseEntity {
         if (this.snapAddress == null) {
             return null;
         } else {
-            return GenericJsonConverter.jsonToObject(this.snapAddress, new TypeReference<OrderAddressDTO>() {});
+            return GenericJsonConverter.jsonToObject(this.snapAddress, new TypeReference<OrderAddressDTO>() {
+            });
         }
     }
 
