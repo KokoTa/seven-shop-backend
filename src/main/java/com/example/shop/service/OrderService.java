@@ -105,6 +105,7 @@ public class OrderService {
                 .snapImg(orderChecker.getSnapImg()).snapTitle(orderChecker.getSnapTitle())
                 .status(OrderStatus.UNPAID.value()).placedTime(placedTime).expiredTime(expiredTime).build();
 
+        // json 数据不能直接用构造器赋值，要手动触发 set 来进行数据格式的转换
         order.setSnapItems(orderChecker.getOrderSkuList());
         order.setSnapAddress(orderDTO.getAddress());
 
@@ -155,12 +156,35 @@ public class OrderService {
         return orderRepository.findByUserIdAndStatus(uid, status, pageable);
     }
 
+    /**
+     * 获取订单详情
+     * @param id 订单ID
+     * @return
+     */
     public Order getOrderDetail(Long id) {
         Long uid = LocalUser.getUser().getId();
         Optional<Order> order = orderRepository.findFirstByUserIdAndId(uid, id);
         return order.orElseThrow(() -> new ParameterException(50012));
     }
 
+    /**
+     * 更新订单的预订单ID
+     * @param orderId
+     * @param prePayId
+     */
+    public void updateOrderPrePayId(Long orderId, String prePayId) {
+        Optional<Order> order = orderRepository.findById(orderId);
+        order.ifPresent(o -> {
+            o.setPrepayId(prePayId);
+            orderRepository.save(o);
+        });
+        order.orElseThrow(() -> new ParameterException(50015));
+    }
+
+    /**
+     * 减库存
+     * @param orderChecker 订单检查器
+     */
     private void reduceStock(OrderChecker orderChecker) {
         List<OrderSku> orderSkuList = orderChecker.getOrderSkuList();
         for (OrderSku orderSku : orderSkuList) {
@@ -170,6 +194,12 @@ public class OrderService {
         }
     }
 
+    /**
+     * 改变优惠券状态为已使用
+     * @param couponId 优惠券ID
+     * @param orderId 订单ID
+     * @param uid 用户ID
+     */
     private void changeCouponStatus(Long couponId, Long orderId, Long uid) {
         Integer result = userCouponRepository.changeCouponStatus(couponId, orderId, uid);
         if (result != 1)

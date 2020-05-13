@@ -24,16 +24,16 @@ public class AuthenticationService {
 
     @Value("${wx.code2session}")
     private String code2sessionUrl;
-    @Value("${wx.appid}")
-    private String appid;
-    @Value("${wx.appsecret}")
-    private String appsecret;
+    @Value("${wx.appId}")
+    private String appId;
+    @Value("${wx.appSecret}")
+    private String appSecret;
 
     @Autowired
     private UserRepository userRepository;
 
     public String code2session(String code) {
-        String url = MessageFormat.format(this.code2sessionUrl, this.appid, this.appsecret, code);
+        String url = MessageFormat.format(this.code2sessionUrl, this.appId, this.appSecret, code);
         String token = null;
 
         // 发送请求

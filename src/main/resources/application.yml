@@ -3,10 +3,20 @@
 condition:
   name: A
   auto-prefix-api-package: com.example.shop.api
+
 wx:
-  appid: wx1b13619a00914149
-  appsecret: 9216871f56c26d3acbd4ae1724dba112
-  code2session:  https://api.weixin.qq.com/sns/jscode2session?appid={0}&secret={1}&js_code={2}&grant_type=authorization_code
+#  下面是小程序模式下的配置
+#  appId: wx1b13619a00914149
+#  appSecret: 9216871f56c26d3acbd4ae1724dba112
+#  code2session:  https://api.weixin.qq.com/sns/jscode2session?appid={0}&secret={1}&js_code={2}&grant_type=authorization_code
+#  下面是网页模式下的配置
+  code2session:  https://api.weixin.qq.com/sns/oauth2/access_token?appid={0}&secret={1}&code={2}&grant_type=authorization_code
+  appId: wxdcb0da10fa48b2d0
+  appSecret: 73564f5b20769d6e734b52ae2f89ffc5
+  mchId: 1573542801 # 微信支付商户号
+  mchKey: o2vuydob12ppnb6r9uux8gjenwurgdt1 # 微信支付商户密钥
+  notify_url: http://loacalhost:8081/v1/payment/pay/order/notify # 支付后微信服务器请求的地址
+
 # 根据环境引入配置
 spring:
   profiles:

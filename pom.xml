@@ -31,7 +31,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
@@ -55,6 +54,7 @@
             </exclusions>
         </dependency>
 
+        <!-- 数据库依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -65,16 +65,25 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- 对象复制工具 -->
         <dependency>
             <groupId>com.github.dozermapper</groupId>
             <artifactId>dozer-core</artifactId>
             <version>6.5.0</version>
         </dependency>
 
+        <!-- jwt -->
         <dependency>
             <groupId>com.auth0</groupId>
             <artifactId>java-jwt</artifactId>
             <version>3.10.1</version>
+        </dependency>
+
+        <!-- 微信支付 -->
+        <dependency>
+          <groupId>com.github.binarywang</groupId>
+          <artifactId>weixin-java-pay</artifactId>
+          <version>3.7.0</version>
         </dependency>
     </dependencies>
 

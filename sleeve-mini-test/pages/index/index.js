@@ -134,6 +134,19 @@ Page({
     })
   },
 
+  onGetPreOrder() {
+    wx.request({
+      url: 'http://localhost:8081/v1/payment/pay/order/321',
+      method: 'POST',
+      success: res => {
+        console.log(res.data)
+      },
+      header: {
+        'Authorization': 'Bearer ' + wx.getStorageSync('token')
+      }
+    })
+  },
+
   onGetClassicDetail() {
     wx.request({
       url: 'http://localhost:3000/v1/classic/200/2',

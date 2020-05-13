@@ -1,7 +1,10 @@
 package com.example.shop.model;
 
+import com.example.shop.core.enumeration.OrderStatus;
 import com.example.shop.dto.OrderAddressDTO;
+import com.example.shop.util.CommonUtil;
 import com.example.shop.util.GenericJsonConverter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.*;
 import org.hibernate.annotations.Where;
@@ -32,8 +35,8 @@ public class Order extends BaseEntity {
     private String prepayId;
     private BigDecimal finalTotalPrice;
     private Integer status;
-    private Date expiredTime;
-    private Date placedTime;
+    private Date expiredTime; // 订单过期时间
+    private Date placedTime; // 订单创建时间
 
     private String snapItems;
     private String snapAddress;
@@ -46,7 +49,6 @@ public class Order extends BaseEntity {
             });
         }
     }
-
     public void setSnapItems(List<OrderSku> specs) {
         if (specs.isEmpty()) {
             this.snapItems = "";
@@ -63,7 +65,6 @@ public class Order extends BaseEntity {
             });
         }
     }
-
     public void setSnapAddress(OrderAddressDTO orderAddressDTO) {
         if (orderAddressDTO == null) {
             this.snapAddress = "";
@@ -71,4 +72,17 @@ public class Order extends BaseEntity {
             this.snapAddress = GenericJsonConverter.objectToJson(orderAddressDTO);
         }
     }
+
+    /**
+     * 判断订单是否合法
+     * @return
+     */
+    public Boolean isValid() {
+        // 非待支付的订单不合法
+        if (!this.getStatus().equals((OrderStatus.UNPAID.value()))) return true;
+        // 过期的订单不合法，未过期的订单合法
+        // isOutOfDate 有两个方法，一个是传入 订单创建时间 + 配置文件的过期时间间隔，另一个是传入 订单过期时间
+        return CommonUtil.isOutOfDate(this.getExpiredTime());
+    }
+
 }
