@@ -16,6 +16,8 @@
 
 <l-button type="warning" l-class="btn" size="long" bind:lintap="onGetPreOrder">获取预订单</l-button>
 
+<l-button type="warning" l-class="btn" size="long" bind:lintap="onPay">下单</l-button>
+
 <l-button type="warning" l-class="btn" size="long" bind:lintap="onGetClassicDetail">获取期刊详情</l-button>
 
 <l-button type="error" l-class="btn" size="long" bind:lintap="onLike">点赞</l-button>

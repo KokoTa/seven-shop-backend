@@ -15,7 +15,7 @@ wx:
   appSecret: 73564f5b20769d6e734b52ae2f89ffc5
   mchId: 1573542801 # 微信支付商户号
   mchKey: o2vuydob12ppnb6r9uux8gjenwurgdt1 # 微信支付商户密钥
-  notify_url: http://loacalhost:8081/v1/payment/pay/order/notify # 支付后微信服务器请求的地址
+  notify_url: http://gr9e9z.natappfree.cc/v1/payment/pay/order/notify # 支付后微信服务器请求的地址
 
 # 根据环境引入配置
 spring:

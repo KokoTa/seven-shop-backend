@@ -2,6 +2,8 @@ import {
   Base64
 } from 'js-base64'
 
+let orderInfo = {}
+
 Page({
   onGetToken() {
     // code
@@ -123,7 +125,7 @@ Page({
 
   onGetOrderDetail() {
     wx.request({
-      url: 'http://localhost:8081/v1/order/detail/320',
+      url: 'http://localhost:8081/v1/order/detail/322',
       method: 'GET',
       success: res => {
         console.log(res.data)
@@ -136,10 +138,11 @@ Page({
 
   onGetPreOrder() {
     wx.request({
-      url: 'http://localhost:8081/v1/payment/pay/order/321',
+      url: 'http://localhost:8081/v1/payment/pay/order/322',
       method: 'POST',
       success: res => {
         console.log(res.data)
+        orderInfo = res.data
       },
       header: {
         'Authorization': 'Bearer ' + wx.getStorageSync('token')
@@ -147,16 +150,35 @@ Page({
     })
   },
 
-  onGetClassicDetail() {
-    wx.request({
-      url: 'http://localhost:3000/v1/classic/200/2',
-      method: 'GET',
-      success: res => {
-        console.log(res.data)
+  onPay() {
+    wx.requestPayment({
+      timeStamp: orderInfo.time_stamp,
+      nonceStr: orderInfo.nonce_str,
+      package: orderInfo.package_value,
+      signType: orderInfo.sign_type,
+      paySign: orderInfo.pay_sign,
+      success(res) {
+        console.log(res)
       },
-      header: {
-        Authorization: this._encode()
+      fail(err) {
+        console.log(err)
       }
+    })
+  },
+
+  onGetClassicDetail() {
+    wx.requestPayment({
+      timeStamp: orderInfo.time_stamp,
+      nonceStr: orderInfo.nonce_str,
+      package: orderInfo.package_value,
+      signType: orderInfo.sign_type,
+      paySign: orderInfo.pay_sign,
+      success(res) {
+        console.log(res)
+      },
+      fail(err) {
+        console.log(err)
+      } 
     })
   },
 

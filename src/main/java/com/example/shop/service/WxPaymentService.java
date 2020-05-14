@@ -1,9 +1,8 @@
 package com.example.shop.service;
 
+import com.example.shop.core.enumeration.OrderStatus;
 import com.example.shop.core.local.LocalUser;
-import com.example.shop.exception.http.ForbiddenException;
-import com.example.shop.exception.http.NotFoundException;
-import com.example.shop.exception.http.ParameterException;
+import com.example.shop.exception.http.*;
 import com.example.shop.model.Order;
 import com.example.shop.repository.OrderRepository;
 import com.example.shop.util.CommonUtil;
@@ -17,8 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class WxPaymentService {
@@ -35,7 +33,11 @@ public class WxPaymentService {
     @Value("${wx.notify_url}")
     private String notifyUrl;
 
-
+    /**
+     * 获取微信预订单
+     * @param oid 订单ID
+     * @return
+     */
     public WxPayMpOrderResult preOrder(Long oid) {
         // 检查用户订单是否存在
         Long uid = LocalUser.getUser().getId();
@@ -52,13 +54,31 @@ public class WxPaymentService {
             // 调用统一下单接口
             wxPayUnifiedOrderResult = this.wxPayService.createOrder(preOrderParams);
         } catch (Exception e)  {
-            throw new ParameterException(50014);
+            throw new RuntimeException(e.getMessage());
         }
 
         // 更新订单的预订单ID
         orderService.updateOrderPrePayId(order.getId(), wxPayUnifiedOrderResult.getPackageValue());
 
         return wxPayUnifiedOrderResult;
+    }
+
+    /**
+     * 微信回调后对订单做处理，设置为已支付
+     * @param orderNo
+     */
+    public void dealOrder(String orderNo) {
+        Optional<Order> orderOptional = this.orderRepository.findFirstByOrderNo(orderNo);
+        Order order = orderOptional.orElseThrow(() -> new ParameterException(50012));
+
+        if (order.getStatus().equals(OrderStatus.UNPAID.value()) ||
+            order.getStatus().equals(OrderStatus.CANCELED.value())) {
+            // 未支付 -> 已支付
+            int res = this.orderRepository.updateStatusByOrderNo(orderNo, OrderStatus.PAID.value());
+            if (res != 1) throw new ServerException(50016);
+        } else {
+            throw new ParameterException(50011);
+        }
     }
 
     /**
@@ -70,7 +90,7 @@ public class WxPaymentService {
         WxPayUnifiedOrderRequest map = new WxPayUnifiedOrderRequest();
 
         // 模拟提交
-        map.setOutTradeNo("123123");
+        map.setOutTradeNo(RandomStringUtils.randomAlphabetic(32));
         map.setBody("test body");
         map.setDeviceInfo("test device");
         map.setFeeType("CNY");
