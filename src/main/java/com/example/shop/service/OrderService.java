@@ -125,7 +125,7 @@ public class OrderService {
             couponId = orderDTO.getCouponId();
         }
         // 信息加入到延迟消息队列（未付款，时间到后要归还库存和优惠券）
-        sendToRedis(order.getId(), uid, couponId);
+        sendToRedis(uid, order.getId(), couponId);
 
         return order.getId();
     }
@@ -220,9 +220,9 @@ public class OrderService {
      * @param uid 用户ID
      * @param couponId 优惠券ID
      */
-    private void sendToRedis(Long oid, Long uid, Long couponId) {
+    private void sendToRedis(Long uid, Long oid, Long couponId) {
         // 主要存储 key，value 值随意
-        String key = oid.toString() + "," + uid.toString() + "," + couponId.toString();
+        String key = uid.toString() + "," + oid.toString() + "," + couponId.toString();
         String value = "1";
         // 这里报错可以用 try catch 包裹起来，因为使用了事务，这里如果抛出错误，会让用户无法下单，会损失不少订单量
         // 且由于这里的错误不影响下单主体逻辑，因此错误可以直接本地消化掉，记入日志即可

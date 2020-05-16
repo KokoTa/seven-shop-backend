@@ -27,4 +27,10 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("update Order o set o.status=:status\n" +
             "where o.orderNo=:orderNo")
     Integer updateStatusByOrderNo(String orderNo, Integer status);
+
+    @Modifying
+    @Query("update Order o set o.status=5\n" +
+            "where o.status = 1\n" +
+            "and o.id = :oid")
+    Integer cancelOrder(Long oid);
 }
