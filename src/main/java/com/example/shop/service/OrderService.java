@@ -22,6 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +31,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -58,6 +60,9 @@ public class OrderService {
 
     @Value("${condition.pay-time-limit}")
     private Integer payTimeLimit;
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     /**
      * 订单数据是否正确
@@ -114,10 +119,13 @@ public class OrderService {
         // 减去库存
         reduceStock(orderChecker);
         // 核销优惠券
+        Long couponId = -1L;
         if (orderDTO.getCouponId() != null) {
             changeCouponStatus(orderDTO.getCouponId(), order.getId(), uid);
+            couponId = orderDTO.getCouponId();
         }
         // 信息加入到延迟消息队列（未付款，时间到后要归还库存和优惠券）
+        sendToRedis(order.getId(), uid, couponId);
 
         return order.getId();
     }
@@ -204,5 +212,21 @@ public class OrderService {
         Integer result = userCouponRepository.changeCouponStatus(couponId, orderId, uid);
         if (result != 1)
             throw new ParameterException(50006);
+    }
+
+    /**
+     * 把订单信息发送给 redis
+     * @param oid 订单ID
+     * @param uid 用户ID
+     * @param couponId 优惠券ID
+     */
+    private void sendToRedis(Long oid, Long uid, Long couponId) {
+        // 主要存储 key，value 值随意
+        String key = oid.toString() + "," + uid.toString() + "," + couponId.toString();
+        String value = "1";
+        // 这里报错可以用 try catch 包裹起来，因为使用了事务，这里如果抛出错误，会让用户无法下单，会损失不少订单量
+        // 且由于这里的错误不影响下单主体逻辑，因此错误可以直接本地消化掉，记入日志即可
+        // 另外可以设置一个定时器，每天凌晨对数据库里所有的订单进行扫描，更新每个订单的状态，防止 redis 宕机导致订单状态未更新的问题
+        stringRedisTemplate.opsForValue().set(key, value, payTimeLimit, TimeUnit.SECONDS);
     }
 }

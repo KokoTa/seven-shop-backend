@@ -10,3 +10,9 @@ spring:
     url: jdbc:mysql://localhost:3306/seven_shop?characterEncoding=utf-8&serverTimezone=Asia/Shanghai
     username: root
     password: 123456
+  redis:
+    host: localhost
+    port: 6379
+    database: 5
+    password:
+    listen-pattern: __keyevent@5__:expired
