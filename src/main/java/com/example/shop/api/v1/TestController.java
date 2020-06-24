@@ -2,8 +2,12 @@ package com.example.shop.api.v1;
 
 import com.example.shop.dto.UserDTO;
 import com.example.shop.exception.http.ForbiddenException;
+import com.example.shop.manager.rocketmq.ProducerSchedule;
 import com.example.shop.other.testClass.A;
 import com.example.shop.other.testClass.B;
+import org.apache.rocketmq.client.exception.MQBrokerException;
+import org.apache.rocketmq.client.exception.MQClientException;
+import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -21,6 +25,9 @@ import javax.validation.constraints.Positive;
 public class TestController {
     @Autowired
     private A a;
+
+    @Autowired
+    private ProducerSchedule producerSchedule;
 
     @GetMapping("/testException")
     String testException() throws Exception {
@@ -43,5 +50,10 @@ public class TestController {
     @PostMapping("/testParams")
     UserDTO testParamByBody(@RequestBody @Validated UserDTO user) {
         return user;
+    }
+
+    @GetMapping("/pushMessageToMQ")
+    public String pushMessageToMQ() throws InterruptedException, RemotingException, MQClientException, MQBrokerException {
+        return producerSchedule.send("TopicTest", "test");
     }
 }

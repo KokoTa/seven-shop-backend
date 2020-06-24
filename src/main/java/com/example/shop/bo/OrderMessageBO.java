@@ -1,6 +1,5 @@
 package com.example.shop.bo;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

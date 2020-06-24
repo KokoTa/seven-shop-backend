@@ -5,6 +5,13 @@ condition:
   year-codes: A,B,C,D,E,F,G,H,I,J,K,L # A 表示 2019 年
   pay-time-limit: 3600 # 订单失效时间，3600秒
 
+rocketmq:
+  consumer:
+    consumer-group: TestConsumerGroup
+  producer:
+    producer-group: TestProducerGroup
+  namesrv-addr: 127.0.0.1:9876
+
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/seven_shop?characterEncoding=utf-8&serverTimezone=Asia/Shanghai
