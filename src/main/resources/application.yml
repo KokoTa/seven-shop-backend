@@ -9,10 +9,14 @@ wx:
 #  appId: wx1b13619a00914149
 #  appSecret: 9216871f56c26d3acbd4ae1724dba112
 #  code2session:  https://api.weixin.qq.com/sns/jscode2session?appid={0}&secret={1}&js_code={2}&grant_type=authorization_code
+#  下面是汇容小程序的配置
+  appId: wx1ac13f6f6780e2f3
+  appSecret: f35a2c4ebdbb32edd2a49f208a913154
+  code2session:  https://api.weixin.qq.com/sns/jscode2session?appid={0}&secret={1}&js_code={2}&grant_type=authorization_code
 #  下面是网页模式下的配置
-  code2session:  https://api.weixin.qq.com/sns/oauth2/access_token?appid={0}&secret={1}&code={2}&grant_type=authorization_code
-  appId: wxdcb0da10fa48b2d0
-  appSecret: 73564f5b20769d6e734b52ae2f89ffc5
+#  code2session:  https://api.weixin.qq.com/sns/oauth2/access_token?appid={0}&secret={1}&code={2}&grant_type=authorization_code
+#  appId: wxdcb0da10fa48b2d0
+#  appSecret: 73564f5b20769d6e734b52ae2f89ffc5
   mchId: 1573542801 # 微信支付商户号
   mchKey: o2vuydob12ppnb6r9uux8gjenwurgdt1 # 微信支付商户密钥
   notify_url: http://gr9e9z.natappfree.cc/v1/payment/pay/order/notify # 支付后微信服务器请求的地址

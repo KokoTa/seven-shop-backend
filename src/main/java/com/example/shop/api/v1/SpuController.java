@@ -23,7 +23,7 @@ public class SpuController {
     @Autowired
     SpuService spuService;
 
-    @GetMapping("/detail/{id}")
+    @GetMapping("/id/{id}")
     public Spu getSpuById(@PathVariable @Positive Long id) {
         Spu spu = spuService.getSpuById(id);
         if (spu == null) {

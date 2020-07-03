@@ -23,7 +23,7 @@ public class ThemeController {
     @Autowired
     ThemeService themeService;
 
-    @GetMapping("/names")
+    @GetMapping("/by/names")
     public List<ThemePureVO> getThemeByNames(
             @RequestParam(name = "names") String names
     ) {
@@ -41,7 +41,7 @@ public class ThemeController {
         return voList;
     }
 
-    @GetMapping("/name/{name}")
+    @GetMapping("/name/{name}/with_spu")
     public Theme getThemeByName(
             @PathVariable(name = "name") String name
     ) {

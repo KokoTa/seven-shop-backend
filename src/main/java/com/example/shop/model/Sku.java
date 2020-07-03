@@ -9,6 +9,8 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -43,7 +45,7 @@ public class Sku extends BaseEntity {
 
     public List<Spec> getSpecs() {
         if (this.specs == null) {
-            return null;
+            return new ArrayList<>();
         } else {
             return GenericJsonConverter.jsonToObject(this.specs, new TypeReference<List<Spec>>() {
             });
@@ -60,7 +62,7 @@ public class Sku extends BaseEntity {
 
     public Map<String, Object> getTest() {
         if (this.test == null) {
-            return null;
+            return new HashMap<>();
         } else {
             return GenericJsonConverter.jsonToObject(this.test, new TypeReference<Map<String, Object>>() {
             });
