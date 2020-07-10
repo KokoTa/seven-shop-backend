@@ -26,8 +26,8 @@ public class TestController {
     @Autowired
     private A a;
 
-    @Autowired
-    private ProducerSchedule producerSchedule;
+//    @Autowired
+//    private ProducerSchedule producerSchedule;
 
     @GetMapping("/testException")
     String testException() throws Exception {
@@ -52,8 +52,8 @@ public class TestController {
         return user;
     }
 
-    @GetMapping("/pushMessageToMQ")
-    public String pushMessageToMQ() throws InterruptedException, RemotingException, MQClientException, MQBrokerException {
-        return producerSchedule.send("TopicTest", "test");
-    }
+//    @GetMapping("/pushMessageToMQ")
+//    public String pushMessageToMQ() throws InterruptedException, RemotingException, MQClientException, MQBrokerException {
+//        return producerSchedule.send("TopicTest", "test");
+//    }
 }
