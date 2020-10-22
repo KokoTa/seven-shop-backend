@@ -15,15 +15,17 @@ public class ConsumerSchedule implements CommandLineRunner {
     @Value("${rocketmq.consumer.consumer-group}")
     private String consumerGroup;
 
-    @Value(("${rocketmq.namesrv-addr}"))
+    @Value("${rocketmq.namesrv-addr}")
     private String namesrvAddr;
 
     public void defaultMQConsumer() throws MQClientException {
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(this.consumerGroup);
         consumer.setNamesrvAddr(namesrvAddr);
 
-        consumer.subscribe("TopicTest", "*"); // 订阅某个主题的消息，* 表示监听所有消息
-        consumer.setConsumeMessageBatchMaxSize(1); // 消费一条数据
+        // 订阅某个主题的消息，* 表示监听所有消息
+        consumer.subscribe("TopicTest", "*");
+        // 消费一条数据
+        consumer.setConsumeMessageBatchMaxSize(1);
 
         // 注册监听器
         consumer.registerMessageListener((MessageListenerConcurrently) (messages, context) -> {

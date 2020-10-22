@@ -18,7 +18,9 @@ public class AutoPrefixUrlMapping extends RequestMappingHandlerMapping {
         if (mappingInfo != null) {
             String prefix = this.getPrefix(handlerType);
             if (prefix != null) {
-                // path 前缀，build 构建一个新 info，combine 合并另一个 info
+                // 用新的请求对象替换旧的请求对象
+                // 这个新的请求对象增加了路径前缀
+                // 比如原本的请求是 /banner，由于新增加了路径前缀 /v1，现在变成了 /v1/banner
                 RequestMappingInfo newRequestMappingInfo = RequestMappingInfo.paths(prefix).build()
                         .combine(mappingInfo);
                 return newRequestMappingInfo;
